@@ -24,7 +24,7 @@ public class DataEntryGUI extends Application {
         grid.setHgap(10);
         grid.setVgap(10);
         grid.setPadding(new Insets(25, 25, 25, 25));
-
+        
 
         //title
         grid.add(new Label("Data Entry"), 1, 0);
@@ -33,7 +33,7 @@ public class DataEntryGUI extends Application {
         grid.add(new Label("Requester First Name:"), 0, 1);
         TextField requesterFirstNameTextField = new TextField();
         grid.add(requesterFirstNameTextField, 1, 1);
-
+        
         // Requester Last Name
         grid.add(new Label("Requester Last Name:"), 0, 2);
         TextField requesterLastNameTextField = new TextField();
@@ -48,6 +48,7 @@ public class DataEntryGUI extends Application {
         grid.add(new Label("Immigrant First Name:"), 0, 4);
         TextField immigrantFirstNameTextField = new TextField();
         grid.add(immigrantFirstNameTextField, 1, 4);
+
 
         // Immigrant Last Name
         grid.add(new Label("Immigrant Last Name:"), 0, 5);
