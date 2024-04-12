@@ -11,6 +11,8 @@ public class Form {
     private String immigrantLastName;
     private Address placeOfBirth;
     private Date dateOfBirth;
+	private String formType;
+
 	public String getRequesterFirstName() {
 		return requesterFirstName;
 	}
@@ -58,5 +60,12 @@ public class Form {
 	}
 	public void setDateOfBirth(Date dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
+	}
+
+	public String getFormType() {
+		return formType;
+	}
+	public void setformType(String formType) {
+		this.formType = formType;
 	}
   }
