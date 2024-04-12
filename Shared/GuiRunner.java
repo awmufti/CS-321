@@ -12,16 +12,16 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
  
-public class SimpleGUI extends Application {
+public class GuiRunner extends Application {
     @Override
     public void start(Stage primaryStage) 
     {
         Parent root;
         try 
         {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("dataentry.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Gui.fxml"));
             fxmlLoader.setRoot(new AnchorPane());
-            root = FXMLLoader.load(getClass().getResource("dataentry.fxml"));
+            root = FXMLLoader.load(getClass().getResource("Gui.fxml"));
             Scene scene = new Scene(root);
 
             primaryStage.setScene(scene);
@@ -34,4 +34,3 @@ public class SimpleGUI extends Application {
         launch(args);
     }
 }
-

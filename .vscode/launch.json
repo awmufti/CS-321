@@ -6,10 +6,19 @@
     "configurations": [
         {
             "type": "java",
+            "name": "GuiRunner",
+            "request": "launch",
+            "mainClass": "Shared.GuiRunner",
+            "projectName": "CS-321_ca4023ee",
+            "vmArgs": "--module-path \"C:/Users/awmuf/Downloads/openjfx-22_windows-x64_bin-sdk/javafx-sdk-22/lib\" --add-modules javafx.controls,javafx.fxml"
+        },
+        {
+            "type": "java",
             "name": "SimpleGUI",
             "request": "launch",
             "mainClass": "Shared.SimpleGUI",
-            "projectName": "CS-321-1_c352f83a"
+            "projectName": "CS-321-1_c352f83a",
+            "vmArgs": "--module-path \"C:/Users/awmuf/Downloads/openjfx-22_windows-x64_bin-sdk/javafx-sdk-22/lib\" --add-modules javafx.controls,javafx.fxml"
         },
         {
             "type": "java",

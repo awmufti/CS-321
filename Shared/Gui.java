@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class DataEntry {
+public class Gui {
 
     @FXML
     private TextField immigrantDOB;
@@ -76,4 +76,3 @@ public class DataEntry {
     }
 
 }
-
