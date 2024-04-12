@@ -6,6 +6,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "ApproverGUI",
+            "request": "launch",
+            "mainClass": "Approver.ApproverGUI",
+            "projectName": "CS-321_c6e5f1e2"
+        },
+        {
+            "type": "java",
+            "name": "SimpleGUI",
+            "request": "launch",
+            "mainClass": "Shared.SimpleGUI",
+            "projectName": "CS-321_c6e5f1e2"
+        },
+        {
+            "type": "java",
             "name": "SimpleGUI",
             "request": "launch",
             "mainClass": "Shared.SimpleGUI",
