@@ -1,20 +1,36 @@
 package Shared;
+import java.io.IOException;
 
 import javafx.application.Application;
-import javafx.stage.Stage;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+ 
 public class SimpleGUI extends Application {
-@Override // Override the start method in the Application class
-    public void start(Stage primaryStage) {
-    // Create a button and place it in the scene
-        Button btOK = new Button("OK");
-        Scene scene = new Scene(btOK, 200, 250);
-        primaryStage.setScene(scene); // Place the scene in the stage
-        primaryStage.setTitle("MyJavaFX"); // Set the stage title
-        primaryStage.show(); // Display the stage
-    }
-    public static void main(String[] args) {
+    @Override
+    public void start(Stage primaryStage) 
+    {
+        Parent root;
+        try 
+        {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("dataentry.fxml"));
+            fxmlLoader.setRoot(new AnchorPane());
+            root = FXMLLoader.load(getClass().getResource("dataentry.fxml"));
+            Scene scene = new Scene(root);
+
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        } 
+        catch (IOException e){}
+}
+ 
+ public static void main(String[] args) {
         launch(args);
     }
 }
