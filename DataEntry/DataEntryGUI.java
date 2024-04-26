@@ -10,14 +10,15 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class DataEntryGUI extends Application {
+public class DataEntryGUI  {
 
 
-    @Override
-    public void start(Stage primaryStage) {
-        primaryStage.setTitle("Extended Registration Page");
+
+    public Scene createDataEntryScene(Stage primaryStage, Runnable onBackToMenu) {
+        primaryStage.setTitle("Data Entry Page");
 
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -85,15 +86,28 @@ public class DataEntryGUI extends Application {
         // Submit Button
         Button submitButton = new Button("Submit");
         grid.add(submitButton, 1, 10);
+        Button backToMenuButton = new Button("Back to Menu");
+        backToMenuButton.setOnAction(e -> onBackToMenu.run());  
+        VBox layout = new VBox(10);
+        layout.getChildren().add(backToMenuButton);
+        layout.getChildren().add(grid);
+        Scene scene = new Scene(layout, 450, 500);
+        return scene;
+    }
 
-        Scene scene = new Scene(grid, 450, 500);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+    private void clearFormFields(TextField requesterFirstName, TextField requesterLastName, TextField requesterEmail,
+            TextField immigrantFirstName, TextField immigrantLastName, TextField immigrantBirthState,
+            TextField immigrantBirthCity, DatePicker dobPicker, ComboBox<String> formComboBox) {
+        requesterFirstName.clear();
+        requesterLastName.clear();
+        requesterEmail.clear();
+        immigrantFirstName.clear();
+        immigrantLastName.clear();
+        immigrantBirthState.clear();
+        immigrantBirthCity.clear();
+        dobPicker.setValue(null);;
+        formComboBox.setValue(null);
     }
 
 
-
-    public static void main(String[] args) {
-        launch(args);
-    }
 }
