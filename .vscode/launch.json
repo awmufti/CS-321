@@ -6,50 +6,20 @@
     "configurations": [
         {
             "type": "java",
-<<<<<<< Updated upstream
-            "name": "DataEntryGUI",
-=======
             "name": "Menu",
             "request": "launch",
             "mainClass": "Shared.Menu",
-            "projectName": "CS-321_c6e5f1e2"
+            "projectName": "CS-321_ca4023ee",
+            "vmArgs": "--module-path \"C:/Users/awmuf/Downloads/openjfx-22_windows-x64_bin-sdk/javafx-sdk-22/lib\" --add-modules javafx.controls,javafx.fxml"
+
         },
         {
             "type": "java",
-            "name": "GuiRunner",
-            "request": "launch",
-            "mainClass": "Shared.GuiRunner",
-            "projectName": "CS-321_c6e5f1e2"
-        },
-        {
-            "type": "java",
-            "name": "ExtendedRegistrationPageWithResponseAndClear",
-            "request": "launch",
-            "mainClass": "Approver.ExtendedRegistrationPageWithResponseAndClear",
-            "projectName": "CS-321_c6e5f1e2"
-        },
-        {
-            "type": "java",
-            "name": "ApproverGUI",
-            "request": "launch",
-            "mainClass": "Approver.ApproverGUI",
-            "projectName": "CS-321_c6e5f1e2"
-        },
-        {
-            "type": "java",
-            "name": "ExtendedRegistrationPageWithDecisionButtons",
-            "request": "launch",
-            "mainClass": "Approver.ExtendedRegistrationPageWithDecisionButtons",
-            "projectName": "CS-321_c6e5f1e2"
-        },
-        {
-            "type": "java",
-            "name": "GuiRunner",
->>>>>>> Stashed changes
+            "name": "DataEntryGUI",
             "request": "launch",
             "mainClass": "DataEntry.DataEntryGUI",
             "projectName": "CS-321_ca4023ee",
-            "vmArgs": "--module-path \"C:/Users/nithin/Downloads/openjfx-22_windows-x64_bin-sdk/javafx-sdk-22/lib\" --add-modules javafx.controls,javafx.fxml"
+            "vmArgs": "--module-path \"C:/Users/awmuf/Downloads/openjfx-22_windows-x64_bin-sdk/javafx-sdk-22/lib\" --add-modules javafx.controls,javafx.fxml"
         },
         {
             "type": "java",

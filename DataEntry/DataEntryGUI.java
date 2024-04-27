@@ -21,11 +21,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
+//GUI for the Data entry person
 public class DataEntryGUI  {
 
-
+    //creates a form object
     Form form = new Form();
+
+    //creates the GUI screen for the Data Entry person
     public Scene createDataEntryScene(Stage primaryStage, SharedDataQueue queue, Runnable onBackToMenu) {
         primaryStage.setTitle("Data Entry Page");
 
@@ -95,11 +97,15 @@ public class DataEntryGUI  {
         // Submit Button
         Button submitButton = new Button("Submit");
         grid.add(submitButton, 1, 10);
+
+        // Back to menu button
         Button backToMenuButton = new Button("Back to Menu");
         backToMenuButton.setOnAction(e -> onBackToMenu.run());  
         VBox layout = new VBox(10);
         layout.getChildren().add(backToMenuButton);
         layout.getChildren().add(grid);
+
+        // if user clicks the submit button, updates the form and enqueues it
         submitButton.setOnAction(event -> {
             if (validateFields(requesterFirstNameTextField, requesterLastNameTextField, requesterEmailTextField,
             immigrantFirstNameTextField, immigrantLastNameTextField, immigrantBirthStateTextField,
@@ -111,12 +117,16 @@ public class DataEntryGUI  {
 
             queue.enqueue(form);
             System.out.println(queue.size());
+
+            //form is sent to the reviewer
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Form has been submitted to the reviewer!");
 
             alert.showAndWait();
             clearFormFields(requesterFirstNameTextField, requesterLastNameTextField, requesterEmailTextField, immigrantFirstNameTextField, immigrantLastNameTextField, immigrantBirthStateTextField, immigrantBirthCityTextField, immigrantDoBPicker, requestedFormComboBox);
             form = null;
-            } else {
+            } 
+            else 
+            {
                 // Show error message
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Validation failed. Please check the input.");
                 alert.showAndWait();
@@ -127,6 +137,7 @@ public class DataEntryGUI  {
         return scene;
     }
 
+    //makes all the fields in the form object empty
     private void clearFormFields(TextField requesterFirstName, TextField requesterLastName, TextField requesterEmail,
             TextField immigrantFirstName, TextField immigrantLastName, TextField immigrantBirthState,
             TextField immigrantBirthCity, DatePicker dobPicker, ComboBox<String> formComboBox) {
@@ -140,6 +151,8 @@ public class DataEntryGUI  {
         dobPicker.setValue(null);
         formComboBox.setValue(null);
     }
+
+    //sets the variables in the form object with the user's input
     private void updateFormFromFields(Form form,TextField requesterFirstName, TextField requesterLastName, TextField requesterEmail,
                                       TextField immigrantFirstName, TextField immigrantLastName, TextField immigrantBirthState,
                                       TextField immigrantBirthCity, DatePicker dobPicker, ComboBox<String> formComboBox) {
@@ -148,6 +161,7 @@ public class DataEntryGUI  {
         form.setRequesterEmail(requesterEmail.getText());
         form.setImmigrantFirstName(immigrantFirstName.getText());
         form.setImmigrantLastName(immigrantLastName.getText());
+
         Address placeOfBirth = new Address();
         placeOfBirth.setCity(immigrantBirthCity.getText());
         placeOfBirth.setState(immigrantBirthState.getText());
@@ -158,6 +172,8 @@ public class DataEntryGUI  {
         }
         form.setformType(formComboBox.getValue());
     }
+
+    //validates the fields in the form object
     private boolean validateFields(TextField requesterFirstName, TextField requesterLastName, TextField requesterEmail,
                                    TextField immigrantFirstName, TextField immigrantLastName, TextField immigrantBirthState,
                                    TextField immigrantBirthCity, DatePicker dobPicker, ComboBox<String> formComboBox) {
@@ -187,18 +203,22 @@ public class DataEntryGUI  {
         return true; // All validations passed
     }
 
+    //checks if the text field is empty
     private boolean isFieldEmpty(TextField field) {
         return field.getText() == null || field.getText().trim().isEmpty();
     }
 
+    //validates the requester's and deceased immigrant's name 
     private boolean isValidName(String name) {
         return Pattern.matches("^[a-zA-Z\\s-]+$", name);
     }
 
+    //validates the requester's email
     private boolean isValidEmail(String email) {
         return Pattern.matches("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$", email);
     }
 
+    //validates the immigrant's DOB
     private boolean isValidDOB(LocalDate dob) {
         return !dob.isAfter(LocalDate.now()) && !dob.isBefore(LocalDate.now().minusYears(200));
     }
