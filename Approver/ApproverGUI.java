@@ -10,11 +10,13 @@ import javafx.scene.layout.VBox;
 import java.time.LocalDate;
 import java.util.regex.Pattern;
 
+import Shared.Address;
 import Shared.Form;
 import Shared.SharedDataQueue;
 
 public class ApproverGUI {
     Form form = new Form();
+
     // Generate and return the scene for the Approver form
     public Scene createApproverScene(SharedDataQueue reviewerQueue, SharedDataQueue queue, Runnable onBackToMenu) {
 
@@ -28,7 +30,7 @@ public class ApproverGUI {
         grid.add(generateButton, 1, 0, 2, 1);
 
         Button backToMenuButton = new Button("Back to Menu");
-        backToMenuButton.setOnAction(e -> onBackToMenu.run());  
+        backToMenuButton.setOnAction(e -> onBackToMenu.run());
 
         TextField requesterFirstNameTextField = new TextField();
         grid.add(new Label("Requester First Name:"), 0, 1);
@@ -64,12 +66,11 @@ public class ApproverGUI {
 
         ComboBox<String> requestedFormComboBox = new ComboBox<>();
         requestedFormComboBox.getItems().addAll(
-            "Naturalization Certificate File",
-            "Non-standard C-File",
-            "Alien Registration Record",
-            "Visa File",
-            "Registry File"
-        );
+                "Naturalization Certificate File",
+                "Non-standard C-File",
+                "Alien Registration Record",
+                "Visa File",
+                "Registry File");
         grid.add(new Label("Requested Form:"), 0, 9);
         grid.add(requestedFormComboBox, 1, 9);
 
@@ -81,9 +82,10 @@ public class ApproverGUI {
         layout.getChildren().add(backToMenuButton);
         layout.getChildren().add(grid);
         // Event handlers
-        setEventHandlers(reviewerQueue, queue, generateButton, acceptButton, denyButton, requesterFirstNameTextField, requesterLastNameTextField,
-                         requesterEmailTextField, immigrantFirstNameTextField, immigrantLastNameTextField,
-                         immigrantBirthStateTextField, immigrantBirthCityTextField, immigrantDoBPicker, requestedFormComboBox);
+        setEventHandlers(reviewerQueue, queue, generateButton, acceptButton, denyButton, requesterFirstNameTextField,
+                requesterLastNameTextField,
+                requesterEmailTextField, immigrantFirstNameTextField, immigrantLastNameTextField,
+                immigrantBirthStateTextField, immigrantBirthCityTextField, immigrantDoBPicker, requestedFormComboBox);
 
         return new Scene(layout, 600, 700);
     }
@@ -115,11 +117,15 @@ public class ApproverGUI {
             if (validateFields(requesterFirstName, requesterLastName, requesterEmail,
             immigrantFirstName, immigrantLastName, immigrantBirthState,
             immigrantBirthCity, dobPicker, formComboBox)) {
+                updateFormFromFields(form, requesterFirstName, requesterLastName, requesterEmail,
+                immigrantFirstName, immigrantLastName, immigrantBirthState,
+                immigrantBirthCity, dobPicker, formComboBox);
                 clearFormFields(requesterFirstName, requesterLastName, requesterEmail,
                 immigrantFirstName, immigrantLastName, immigrantBirthState,
                 immigrantBirthCity, dobPicker, formComboBox);
                 form = null;   
                 // Proceed with processing
+                sendEmail(requesterEmail);
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Form has been accepted and processed!");
                 alert.showAndWait();
  
@@ -142,18 +148,19 @@ public class ApproverGUI {
     }
 
     private boolean validateFields(TextField requesterFirstName, TextField requesterLastName, TextField requesterEmail,
-                                   TextField immigrantFirstName, TextField immigrantLastName, TextField immigrantBirthState,
-                                   TextField immigrantBirthCity, DatePicker dobPicker, ComboBox<String> formComboBox) {
+            TextField immigrantFirstName, TextField immigrantLastName, TextField immigrantBirthState,
+            TextField immigrantBirthCity, DatePicker dobPicker, ComboBox<String> formComboBox) {
         // Validate non-null and non-empty
         if (isFieldEmpty(requesterFirstName) || isFieldEmpty(requesterLastName) || isFieldEmpty(requesterEmail) ||
-            isFieldEmpty(immigrantFirstName) || isFieldEmpty(immigrantLastName) || isFieldEmpty(immigrantBirthState) ||
-            isFieldEmpty(immigrantBirthCity) || dobPicker.getValue() == null || formComboBox.getValue() == null) {
+                isFieldEmpty(immigrantFirstName) || isFieldEmpty(immigrantLastName) || isFieldEmpty(immigrantBirthState)
+                ||
+                isFieldEmpty(immigrantBirthCity) || dobPicker.getValue() == null || formComboBox.getValue() == null) {
             return false;
         }
 
         // Validate names
         if (!isValidName(requesterFirstName.getText()) || !isValidName(immigrantFirstName.getText()) ||
-            !isValidName(requesterLastName.getText()) || !isValidName(immigrantLastName.getText())) {
+                !isValidName(requesterLastName.getText()) || !isValidName(immigrantLastName.getText())) {
             return false;
         }
 
@@ -174,12 +181,17 @@ public class ApproverGUI {
         return field.getText() == null || field.getText().trim().isEmpty();
     }
 
+    private void sendEmail(TextField email) {
+        return;
+    }
+
     private boolean isValidName(String name) {
         return Pattern.matches("^[a-zA-Z\\s-]+$", name);
     }
 
     private boolean isValidEmail(String email) {
-        return Pattern.matches("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$", email);
+        return Pattern.matches("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$",
+                email);
     }
 
     private boolean isValidDOB(LocalDate dob) {
@@ -196,7 +208,8 @@ public class ApproverGUI {
         immigrantLastName.clear();
         immigrantBirthState.clear();
         immigrantBirthCity.clear();
-        dobPicker.setValue(null);;
+        dobPicker.setValue(null);
+        ;
         formComboBox.setValue(null);
     }
 
@@ -204,5 +217,25 @@ public class ApproverGUI {
         for (TextField textField : textFields) {
             textField.clear();
         }
+    }
+
+    private void updateFormFromFields(Form form, TextField requesterFirstName, TextField requesterLastName,
+            TextField requesterEmail,
+            TextField immigrantFirstName, TextField immigrantLastName, TextField immigrantBirthState,
+            TextField immigrantBirthCity, DatePicker dobPicker, ComboBox<String> formComboBox) {
+        form.setRequesterFirstName(requesterFirstName.getText());
+        form.setRequesterLastName(requesterLastName.getText());
+        form.setRequesterEmail(requesterEmail.getText());
+        form.setImmigrantFirstName(immigrantFirstName.getText());
+        form.setImmigrantLastName(immigrantLastName.getText());
+        Address placeOfBirth = new Address();
+        placeOfBirth.setCity(immigrantBirthCity.getText());
+        placeOfBirth.setState(immigrantBirthState.getText());
+        form.setPlaceOfBirth(placeOfBirth);
+        LocalDate localDate = dobPicker.getValue();
+        if (localDate != null) {
+            form.setDateOfBirth(localDate);
+        }
+        form.setformType(formComboBox.getValue());
     }
 }

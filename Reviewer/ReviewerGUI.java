@@ -74,8 +74,8 @@ public class ReviewerGUI {
         grid.add(new Label("Requested Form:"), 0, 9);
         grid.add(requestedFormComboBox, 1, 9);
 
-        Button acceptButton = new Button("Accept");
-        Button denyButton = new Button("Deny");
+        Button acceptButton = new Button("Submit");
+        Button denyButton = new Button("Discard");
         grid.add(acceptButton, 0, 10);
         grid.add(denyButton, 1, 10);
         VBox layout = new VBox(10);
@@ -138,12 +138,12 @@ public class ReviewerGUI {
         });
 
         deny.setOnAction(event -> {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Form has been sent back to the reviewer.");
-            reviewerQueue.enqueue(form);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Form has been discarded.");
             alert.showAndWait();
             clearFormFields(requesterFirstName, requesterLastName, requesterEmail,
                             immigrantFirstName, immigrantLastName, immigrantBirthState,
                             immigrantBirthCity, dobPicker, formComboBox);
+            form=null;
         });
     }
 
