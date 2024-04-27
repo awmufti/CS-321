@@ -10,6 +10,7 @@ import javafx.scene.layout.VBox;
 import java.time.LocalDate;
 import java.util.regex.Pattern;
 
+import Shared.Address;
 import Shared.Form;
 import Shared.SharedDataQueue;
 
@@ -85,7 +86,7 @@ public class ReviewerGUI {
                          requesterEmailTextField, immigrantFirstNameTextField, immigrantLastNameTextField,
                          immigrantBirthStateTextField, immigrantBirthCityTextField, immigrantDoBPicker, requestedFormComboBox);
 
-        return new Scene(layout, 500, 700);
+        return new Scene(layout, 600, 700);
     }
 
     private void setEventHandlers(SharedDataQueue reviewerQueue, SharedDataQueue queue, Button generate, Button accept, Button deny, 
@@ -115,6 +116,9 @@ public class ReviewerGUI {
             if (validateFields(requesterFirstName, requesterLastName, requesterEmail,
             immigrantFirstName, immigrantLastName, immigrantBirthState,
             immigrantBirthCity, dobPicker, formComboBox)&&USDatabaseCheck(immigrantFirstName, immigrantLastName, immigrantBirthState)) {
+                updateFormFromFields(form, requesterFirstName, requesterLastName, requesterEmail,
+                immigrantFirstName, immigrantLastName, immigrantBirthState,
+                immigrantBirthCity, dobPicker, formComboBox);
                 clearFormFields(requesterFirstName, requesterLastName, requesterEmail,
                 immigrantFirstName, immigrantLastName, immigrantBirthState,
                 immigrantBirthCity, dobPicker, formComboBox);
@@ -122,7 +126,7 @@ public class ReviewerGUI {
                 // Proceed with processing
                 queue.enqueue(form);
                 form = null; 
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Form has been accepted and sent to the approver!");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Form has been updated and sent to the approver!");
                 alert.showAndWait();
   
             } else {
@@ -147,7 +151,24 @@ public class ReviewerGUI {
             TextField immigrantBirthState) {
                 return true;
     }
-
+    private void updateFormFromFields(Form form,TextField requesterFirstName, TextField requesterLastName, TextField requesterEmail,
+                                      TextField immigrantFirstName, TextField immigrantLastName, TextField immigrantBirthState,
+                                      TextField immigrantBirthCity, DatePicker dobPicker, ComboBox<String> formComboBox) {
+        form.setRequesterFirstName(requesterFirstName.getText());
+        form.setRequesterLastName(requesterLastName.getText());
+        form.setRequesterEmail(requesterEmail.getText());
+        form.setImmigrantFirstName(immigrantFirstName.getText());
+        form.setImmigrantLastName(immigrantLastName.getText());
+        Address placeOfBirth = new Address();
+        placeOfBirth.setCity(immigrantBirthCity.getText());
+        placeOfBirth.setState(immigrantBirthState.getText());
+        form.setPlaceOfBirth(placeOfBirth);
+        LocalDate localDate = dobPicker.getValue();
+        if (localDate != null) {
+            form.setDateOfBirth(localDate);
+        }
+        form.setformType(formComboBox.getValue());
+    }
     private boolean validateFields(TextField requesterFirstName, TextField requesterLastName, TextField requesterEmail,
                                    TextField immigrantFirstName, TextField immigrantLastName, TextField immigrantBirthState,
                                    TextField immigrantBirthCity, DatePicker dobPicker, ComboBox<String> formComboBox) {

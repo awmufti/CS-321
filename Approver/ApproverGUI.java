@@ -85,7 +85,7 @@ public class ApproverGUI {
                          requesterEmailTextField, immigrantFirstNameTextField, immigrantLastNameTextField,
                          immigrantBirthStateTextField, immigrantBirthCityTextField, immigrantDoBPicker, requestedFormComboBox);
 
-        return new Scene(layout, 500, 700);
+        return new Scene(layout, 600, 700);
     }
 
     private void setEventHandlers(SharedDataQueue reviewerQueue, SharedDataQueue queue, Button generate, Button accept, Button deny, 

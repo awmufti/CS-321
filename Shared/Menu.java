@@ -57,7 +57,6 @@ public class Menu extends Application {
         primaryStage.setScene(dataentryScene);
     }
     private void switchToMainMenu() {
-        // Assume createMainMenuScene() is a method that creates the main menu scene
         Scene mainMenuScene = createMainMenuScene();
         primaryStage.setTitle("Menu");
         primaryStage.setScene(mainMenuScene);

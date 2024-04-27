@@ -108,7 +108,7 @@ public class DataEntryGUI  {
             updateFormFromFields(form, requesterFirstNameTextField, requesterLastNameTextField, requesterEmailTextField,
                                  immigrantFirstNameTextField, immigrantLastNameTextField, immigrantBirthStateTextField,
                                  immigrantBirthCityTextField, immigrantDoBPicker, requestedFormComboBox);
-            // Do something with the form, like saving or processing
+
             queue.enqueue(form);
             System.out.println(queue.size());
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Form has been submitted to the reviewer!");
@@ -123,7 +123,7 @@ public class DataEntryGUI  {
             }
 
         });
-        Scene scene = new Scene(layout, 450, 500);
+        Scene scene = new Scene(layout, 600, 500);
         return scene;
     }
 
