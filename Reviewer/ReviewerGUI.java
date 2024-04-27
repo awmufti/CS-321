@@ -89,6 +89,7 @@ public class ReviewerGUI {
         return new Scene(layout, 600, 700);
     }
 
+    //set handlers
     private void setEventHandlers(SharedDataQueue reviewerQueue, SharedDataQueue queue, Button generate, Button accept, Button deny, 
                                   TextField requesterFirstName, TextField requesterLastName, TextField requesterEmail, 
                                   TextField immigrantFirstName, TextField immigrantLastName, TextField immigrantBirthState, 
@@ -147,10 +148,13 @@ public class ReviewerGUI {
         });
     }
 
+    //feigns database validation
     private boolean USDatabaseCheck(TextField immigrantFirstName, TextField immigrantLastName,
             TextField immigrantBirthState) {
                 return true;
     }
+
+    //updates form values with what was entered from the field
     private void updateFormFromFields(Form form,TextField requesterFirstName, TextField requesterLastName, TextField requesterEmail,
                                       TextField immigrantFirstName, TextField immigrantLastName, TextField immigrantBirthState,
                                       TextField immigrantBirthCity, DatePicker dobPicker, ComboBox<String> formComboBox) {
@@ -169,6 +173,8 @@ public class ReviewerGUI {
         }
         form.setformType(formComboBox.getValue());
     }
+
+    //validation for the various different form fields
     private boolean validateFields(TextField requesterFirstName, TextField requesterLastName, TextField requesterEmail,
                                    TextField immigrantFirstName, TextField immigrantLastName, TextField immigrantBirthState,
                                    TextField immigrantBirthCity, DatePicker dobPicker, ComboBox<String> formComboBox) {
@@ -198,22 +204,31 @@ public class ReviewerGUI {
         return true; // All validations passed
     }
 
+
+    //check if a field is empty
     private boolean isFieldEmpty(TextField field) {
         return field.getText() == null || field.getText().trim().isEmpty();
     }
 
+
+    //Check for letters in the name
     private boolean isValidName(String name) {
         return Pattern.matches("^[a-zA-Z\\s-]+$", name);
     }
 
+    //validation for the email
     private boolean isValidEmail(String email) {
         return Pattern.matches("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$", email);
     }
 
+
+    //validation for the dob
     private boolean isValidDOB(LocalDate dob) {
         return !dob.isAfter(LocalDate.now()) && !dob.isBefore(LocalDate.now().minusYears(200));
     }
 
+
+    //Clears all the form fields
     private void clearFormFields(TextField requesterFirstName, TextField requesterLastName, TextField requesterEmail,
             TextField immigrantFirstName, TextField immigrantLastName, TextField immigrantBirthState,
             TextField immigrantBirthCity, DatePicker dobPicker, ComboBox<String> formComboBox) {
@@ -228,6 +243,7 @@ public class ReviewerGUI {
         formComboBox.setValue(null);
     }
 
+    //clears all the text fields.
     private void clearFormFields(TextField... textFields) {
         for (TextField textField : textFields) {
             textField.clear();
