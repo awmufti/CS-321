@@ -1,4 +1,4 @@
-package Approver;
+package Reviewer;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -13,10 +13,10 @@ import java.util.regex.Pattern;
 import Shared.Form;
 import Shared.SharedDataQueue;
 
-public class ApproverGUI {
+public class ReviewerGUI {
     Form form = new Form();
     // Generate and return the scene for the Approver form
-    public Scene createApproverScene(SharedDataQueue reviewerQueue, SharedDataQueue queue, Runnable onBackToMenu) {
+    public Scene createReviewerScene(SharedDataQueue reviewerQueue, SharedDataQueue queue, Runnable onBackToMenu) {
 
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -94,12 +94,12 @@ public class ApproverGUI {
                                   TextField immigrantBirthCity, DatePicker dobPicker, ComboBox<String> formComboBox) {
         
         generate.setOnAction(event -> {
-            if(queue.isEmpty()){
+            if(reviewerQueue.isEmpty()){
                 Alert alert = new Alert(Alert.AlertType.ERROR, "There are no items in the queue.");
                 alert.showAndWait();
                 return;
             }
-            form = queue.dequeue();
+            form = reviewerQueue.dequeue();
             requesterFirstName.setText(form.getRequesterFirstName());
             requesterLastName.setText(form.getRequesterLastName());
             requesterEmail.setText(form.getRequesterEmail());
@@ -114,15 +114,17 @@ public class ApproverGUI {
         accept.setOnAction(event -> {
             if (validateFields(requesterFirstName, requesterLastName, requesterEmail,
             immigrantFirstName, immigrantLastName, immigrantBirthState,
-            immigrantBirthCity, dobPicker, formComboBox)) {
+            immigrantBirthCity, dobPicker, formComboBox)&&USDatabaseCheck(immigrantFirstName, immigrantLastName, immigrantBirthState)) {
                 clearFormFields(requesterFirstName, requesterLastName, requesterEmail,
                 immigrantFirstName, immigrantLastName, immigrantBirthState,
                 immigrantBirthCity, dobPicker, formComboBox);
-                form = null;   
+
                 // Proceed with processing
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Form has been accepted and processed!");
+                queue.enqueue(form);
+                form = null; 
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Form has been accepted and sent to the approver!");
                 alert.showAndWait();
- 
+  
             } else {
                 // Show error message
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Validation failed. Please check the input.");
@@ -139,6 +141,11 @@ public class ApproverGUI {
                             immigrantFirstName, immigrantLastName, immigrantBirthState,
                             immigrantBirthCity, dobPicker, formComboBox);
         });
+    }
+
+    private boolean USDatabaseCheck(TextField immigrantFirstName, TextField immigrantLastName,
+            TextField immigrantBirthState) {
+                return true;
     }
 
     private boolean validateFields(TextField requesterFirstName, TextField requesterLastName, TextField requesterEmail,

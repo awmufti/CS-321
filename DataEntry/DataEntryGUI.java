@@ -1,9 +1,18 @@
 package DataEntry;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.regex.Pattern;
+
+import Shared.Address;
+import Shared.Form;
+import Shared.SharedDataQueue;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -16,8 +25,8 @@ import javafx.stage.Stage;
 public class DataEntryGUI  {
 
 
-
-    public Scene createDataEntryScene(Stage primaryStage, Runnable onBackToMenu) {
+    Form form = new Form();
+    public Scene createDataEntryScene(Stage primaryStage, SharedDataQueue queue, Runnable onBackToMenu) {
         primaryStage.setTitle("Data Entry Page");
 
         GridPane grid = new GridPane();
@@ -91,6 +100,29 @@ public class DataEntryGUI  {
         VBox layout = new VBox(10);
         layout.getChildren().add(backToMenuButton);
         layout.getChildren().add(grid);
+        submitButton.setOnAction(event -> {
+            if (validateFields(requesterFirstNameTextField, requesterLastNameTextField, requesterEmailTextField,
+            immigrantFirstNameTextField, immigrantLastNameTextField, immigrantBirthStateTextField,
+            immigrantBirthCityTextField, immigrantDoBPicker, requestedFormComboBox)) {
+            // Populate the Form object with data from fields
+            updateFormFromFields(form, requesterFirstNameTextField, requesterLastNameTextField, requesterEmailTextField,
+                                 immigrantFirstNameTextField, immigrantLastNameTextField, immigrantBirthStateTextField,
+                                 immigrantBirthCityTextField, immigrantDoBPicker, requestedFormComboBox);
+            // Do something with the form, like saving or processing
+            queue.enqueue(form);
+            System.out.println(queue.size());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Form has been submitted to the reviewer!");
+
+            alert.showAndWait();
+            clearFormFields(requesterFirstNameTextField, requesterLastNameTextField, requesterEmailTextField, immigrantFirstNameTextField, immigrantLastNameTextField, immigrantBirthStateTextField, immigrantBirthCityTextField, immigrantDoBPicker, requestedFormComboBox);
+            form = null;
+            } else {
+                // Show error message
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Validation failed. Please check the input.");
+                alert.showAndWait();
+            }
+
+        });
         Scene scene = new Scene(layout, 450, 500);
         return scene;
     }
@@ -105,8 +137,70 @@ public class DataEntryGUI  {
         immigrantLastName.clear();
         immigrantBirthState.clear();
         immigrantBirthCity.clear();
-        dobPicker.setValue(null);;
+        dobPicker.setValue(null);
         formComboBox.setValue(null);
+    }
+    private void updateFormFromFields(Form form,TextField requesterFirstName, TextField requesterLastName, TextField requesterEmail,
+                                      TextField immigrantFirstName, TextField immigrantLastName, TextField immigrantBirthState,
+                                      TextField immigrantBirthCity, DatePicker dobPicker, ComboBox<String> formComboBox) {
+        form.setRequesterFirstName(requesterFirstName.getText());
+        form.setRequesterLastName(requesterLastName.getText());
+        form.setRequesterEmail(requesterEmail.getText());
+        form.setImmigrantFirstName(immigrantFirstName.getText());
+        form.setImmigrantLastName(immigrantLastName.getText());
+        Address placeOfBirth = new Address();
+        placeOfBirth.setCity(immigrantBirthCity.getText());
+        placeOfBirth.setState(immigrantBirthState.getText());
+        form.setPlaceOfBirth(placeOfBirth);
+        LocalDate localDate = dobPicker.getValue();
+        if (localDate != null) {
+            form.setDateOfBirth(localDate);
+        }
+        form.setformType(formComboBox.getValue());
+    }
+    private boolean validateFields(TextField requesterFirstName, TextField requesterLastName, TextField requesterEmail,
+                                   TextField immigrantFirstName, TextField immigrantLastName, TextField immigrantBirthState,
+                                   TextField immigrantBirthCity, DatePicker dobPicker, ComboBox<String> formComboBox) {
+        // Validate non-null and non-empty
+        if (isFieldEmpty(requesterFirstName) || isFieldEmpty(requesterLastName) || isFieldEmpty(requesterEmail) ||
+            isFieldEmpty(immigrantFirstName) || isFieldEmpty(immigrantLastName) || isFieldEmpty(immigrantBirthState) ||
+            isFieldEmpty(immigrantBirthCity) || dobPicker.getValue() == null || formComboBox.getValue() == null) {
+            return false;
+        }
+
+        // Validate names
+        if (!isValidName(requesterFirstName.getText()) || !isValidName(immigrantFirstName.getText()) ||
+            !isValidName(requesterLastName.getText()) || !isValidName(immigrantLastName.getText())) {
+            return false;
+        }
+
+        // Validate email
+        if (!isValidEmail(requesterEmail.getText())) {
+            return false;
+        }
+
+        // Validate DoB not more than 200 years ago
+        if (!isValidDOB(dobPicker.getValue())) {
+            return false;
+        }
+
+        return true; // All validations passed
+    }
+
+    private boolean isFieldEmpty(TextField field) {
+        return field.getText() == null || field.getText().trim().isEmpty();
+    }
+
+    private boolean isValidName(String name) {
+        return Pattern.matches("^[a-zA-Z\\s-]+$", name);
+    }
+
+    private boolean isValidEmail(String email) {
+        return Pattern.matches("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$", email);
+    }
+
+    private boolean isValidDOB(LocalDate dob) {
+        return !dob.isAfter(LocalDate.now()) && !dob.isBefore(LocalDate.now().minusYears(200));
     }
 
 

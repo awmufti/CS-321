@@ -1,5 +1,6 @@
 package Shared;
 
+import java.time.LocalDate;
 import java.util.Date;
 //NITHIN
 public class Form {
@@ -10,7 +11,7 @@ public class Form {
     private String immigrantFirstName;
     private String immigrantLastName;
     private Address placeOfBirth;
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
 	private String formType;
 
 	public String getRequesterFirstName() {
@@ -55,10 +56,10 @@ public class Form {
 	public void setPlaceOfBirth(Address placeOfBirth) {
 		this.placeOfBirth = placeOfBirth;
 	}
-    public Date getDateOfBirth() {
+    public LocalDate getDateOfBirth() {
 		return dateOfBirth;
 	}
-	public void setDateOfBirth(Date dateOfBirth) {
+	public void setDateOfBirth(LocalDate dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
 

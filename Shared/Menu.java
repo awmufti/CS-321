@@ -1,6 +1,7 @@
 package Shared;
 import Approver.ApproverGUI;
 import DataEntry.DataEntryGUI;
+import Reviewer.ReviewerGUI;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -11,21 +12,25 @@ import javafx.stage.Stage;
 public class Menu extends Application {
 
     private Stage primaryStage;
-
+    public SharedDataQueue reviewerQueue;
+    public SharedDataQueue approverQueue;
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
-
+        reviewerQueue = new SharedDataQueue();
+        approverQueue = new SharedDataQueue();
         VBox menu = new VBox(10);
         menu.setAlignment(Pos.CENTER);
 
-        Button btnApprover = new Button("Approver Form");
-        Button btnOtherForm = new Button("Data Entry Form"); // Replace with actual form name
+        Button btnDataEntry = new Button("Data Entry Form");
+        Button btnReviewer = new Button("Revewier Form"); 
+        Button btnApprover = new Button("Approver Form"); 
 
-        btnApprover.setOnAction(e -> switchToApproverForm());
-        btnOtherForm.setOnAction(e -> switchToDataEntryForm()); // Implement this method similarly
+        btnDataEntry.setOnAction(e -> switchToDataEntryForm());
+        btnReviewer.setOnAction(e -> switchToReviewerForm()); 
+        btnApprover.setOnAction(e -> switchToApproverForm()); 
 
-        menu.getChildren().addAll(btnApprover, btnOtherForm);
+        menu.getChildren().addAll(btnDataEntry, btnReviewer, btnApprover);
 
         Scene mainScene = new Scene(menu, 400, 300);
         primaryStage.setTitle("Main Menu");
@@ -35,13 +40,20 @@ public class Menu extends Application {
 
     private void switchToApproverForm() {
         ApproverGUI approverGUI = new ApproverGUI();
-        Scene approverScene = approverGUI.createApproverScene(() -> switchToMainMenu());
+        primaryStage.setTitle("Approver Form");
+        Scene approverScene = approverGUI.createApproverScene(reviewerQueue,approverQueue, () -> switchToMainMenu());
         primaryStage.setScene(approverScene);
     }
-
+    private void switchToReviewerForm() {
+        primaryStage.setTitle("Reviewer Form");
+        ReviewerGUI reviewerGUI = new ReviewerGUI();
+        System.out.println(reviewerQueue.size());
+        Scene reviewerScene = reviewerGUI.createReviewerScene(reviewerQueue, approverQueue,() -> switchToMainMenu());
+        primaryStage.setScene(reviewerScene);
+    }
     private void switchToDataEntryForm() {
         DataEntryGUI dataentryGUI = new DataEntryGUI();
-        Scene dataentryScene = dataentryGUI.createDataEntryScene(primaryStage, () -> switchToMainMenu());
+        Scene dataentryScene = dataentryGUI.createDataEntryScene(primaryStage, reviewerQueue, () -> switchToMainMenu());
         primaryStage.setScene(dataentryScene);
     }
     private void switchToMainMenu() {
@@ -54,14 +66,16 @@ public class Menu extends Application {
         VBox menu = new VBox(10);
         menu.setAlignment(Pos.CENTER);
 
-        Button btnApprover = new Button("Approver Form");
-        Button btnOtherForm = new Button("Data Entry Form"); // Replace with actual form name
 
-        btnApprover.setOnAction(e -> switchToApproverForm());
-        btnOtherForm.setOnAction(e -> switchToDataEntryForm()); // Implement this method similarly
+        Button btnDataEntry = new Button("Data Entry Form");
+        Button btnReviewer = new Button("Reviewer Form"); 
+        Button btnApprover = new Button("Approver Form"); 
 
-        menu.getChildren().addAll(btnApprover, btnOtherForm);
+        btnDataEntry.setOnAction(e -> switchToDataEntryForm());
+        btnReviewer.setOnAction(e -> switchToReviewerForm()); 
+        btnApprover.setOnAction(e -> switchToApproverForm()); 
 
+        menu.getChildren().addAll(btnDataEntry, btnReviewer, btnApprover);
         Scene mainScene = new Scene(menu, 400, 300);
         return mainScene;
     }
